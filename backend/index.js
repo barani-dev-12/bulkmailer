@@ -16,6 +16,11 @@ app.post("/sendemail", (req, res) => {
   var msg = req.body.emailmsg;
   var emaillist = req.body.emaillist;
   credential.find().then((data) => {
+    if (data.length === 0) {
+      console.log("No credentials found in database");
+      return res.send(false);
+    }
+
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
@@ -23,6 +28,7 @@ app.post("/sendemail", (req, res) => {
         pass: data[0].toJSON().pass,
       },
     });
+
     new Promise(async function (resolve, reject) {
       try {
         for (var i = 0; i < emaillist.length; i++) {
@@ -38,13 +44,15 @@ app.post("/sendemail", (req, res) => {
         resolve("success")
       }
       catch (err) {
+        console.log("Nodemailer error:", err)
         reject("failed")
       }
     }).then(() => { res.send(true) })
       .catch(() => { res.send(false) })
 
   }).catch((err) => {
-    console.log(err)
+    console.log("Database error:", err)
+    res.send(false)
   })
 })
 
