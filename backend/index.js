@@ -12,6 +12,10 @@ mongoose.connect("mongodb+srv://baranibtech4_db_user:123@cluster0.tach31f.mongod
 
 const credential = new mongoose.model("credential", {}, "bulkmail")
 
+app.get("/test", (req, res) => {
+  res.send("API is reachable!");
+});
+
 app.post("/sendemail", (req, res) => {
   console.log("Received request to /sendemail");
   var msg = req.body.emailmsg;
