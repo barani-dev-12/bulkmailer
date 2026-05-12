@@ -13,6 +13,7 @@ mongoose.connect("mongodb+srv://baranibtech4_db_user:123@cluster0.tach31f.mongod
 const credential = new mongoose.model("credential", {}, "bulkmail")
 
 app.post("/sendemail", (req, res) => {
+  console.log("Received request to /sendemail");
   var msg = req.body.emailmsg;
   var emaillist = req.body.emaillist;
   credential.find().then((data) => {
@@ -34,7 +35,7 @@ app.post("/sendemail", (req, res) => {
         for (var i = 0; i < emaillist.length; i++) {
           await transporter.sendMail(
             {
-              from: "baranibtech4@gmail.com",
+              from: data[0].toJSON().user,
               to: emaillist[i],
               subject: "A message from bulk mail app.",
               text: msg
@@ -60,6 +61,6 @@ app.get("/", (req, res) => {
   res.send("Backend running successfully");
 });
 
-app.listen(5000, () => {
-  console.log("Server is running on port 5000")
+app.listen(process.env.PORT || 5000, () => {
+  console.log("Server is running on port " + (process.env.PORT || 5000))
 })
