@@ -10,7 +10,7 @@ function App() {
 
   function Send() {
     setstatusValue(true)
-    axios.post("http://localhost:5000/sendemail", { emailmsg: emailmsg, emaillist: emaillist }).then(function (res) {
+    axios.post("https://bulkmailer-9eaq.onrender.com", { emailmsg: emailmsg, emaillist: emaillist }).then(function (res) {
       if (res.data === true) {
         alert("Email sent successfully")
         setstatusValue(false)
@@ -121,7 +121,7 @@ function App() {
         </div>
         <button onClick={Send} className="w-full p-4 bg-green-400 text-xl font-semibold border rounded-xl">{statusValue ? "Sending..." : "Send"}</button>
       </div>
-      
+
       <div className="flex justify-around bg-white border border-green-100 rounded-2xl p-4 m-5">
 
         <div className="flex flex-col items-center gap-2">
