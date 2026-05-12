@@ -20,12 +20,14 @@ app.post("/sendemail", (req, res) => {
   var emaillist = req.body.emaillist;
   credential.find().then((data) => {
     const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: data[0].toJSON().user,
-        pass: data[0].toJSON().pass,
-      },
-    });
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false,
+  auth: {
+    user: data[0].toJSON().user,
+    pass: data[0].toJSON().pass,
+  },
+});
 
     new Promise(async function (resolve, reject) {
       try {
