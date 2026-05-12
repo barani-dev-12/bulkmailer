@@ -7,6 +7,7 @@ function App() {
   const [emailmsg, setEmailmsg] = useState("");
   const [statusValue, setstatusValue] = useState(false)
   const [emaillist, setEmaillist] = useState([])
+  const [filename, setFilename] = useState("");
 
   function Send() {
   setstatusValue(true)
@@ -39,6 +40,7 @@ function App() {
   function handleFile(evt) {
     const file = evt.target.files[0];
     console.log(file)
+    setFilename(file.name);
 
     const reader = new FileReader();
 
@@ -127,6 +129,15 @@ function App() {
           <p className="font-bold text-black text-sm">Drag & drop your file here</p>
           <p className="text-gray-400 text-xs mt-1">or click to browse</p>
         </div>
+        {
+  filename && (
+    <div className="w-full bg-green-50 border border-green-200 rounded-xl p-3 text-left">
+      <p className="text-green-700 font-semibold">
+        Selected File: {filename}
+      </p>
+    </div>
+  )
+}
         <div className="bg-green-100 w-full p-4 text-left border rounded-xl flex justify-between items-center gap-4">
           <div className="flex items-center gap-2">
             <i className="fa-regular fa-envelope text-xl"></i>
