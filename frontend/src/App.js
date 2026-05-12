@@ -10,7 +10,7 @@ function App() {
 
   function Send() {
     setstatusValue(true)
-    axios.post("https://bulkmailer-9eaq.onrender.com/sendemail", { emailmsg: emailmsg, emaillist: emaillist }).then(function (res) {
+    axios.post("http://localhost:5000/sendemail", { emailmsg: emailmsg, emaillist: emaillist }).then(function (res) {
       if (res.data === true) {
         alert("Email sent successfully")
         setstatusValue(false)
