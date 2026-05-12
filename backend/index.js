@@ -5,10 +5,11 @@ const mongoose = require('mongoose');
 
 const app = express()
 
+require('dotenv').config()
 app.use(cors())
 app.use(express.json())
 
-mongoose.connect("mongodb+srv://baranibtech4_db_user:123@cluster0.tach31f.mongodb.net/passkey?appName=Cluster0").then(() => { console.log("Connected to db") }).catch(() => { console.log("Failed to connect") })
+mongoose.connect(process.env.MONGO_URI).then(() => { console.log("Connected to db") }).catch(() => { console.log("Failed to connect") })
 
 const credential = new mongoose.model("credential", {}, "bulkmail")
 
