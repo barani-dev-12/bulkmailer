@@ -1,61 +1,46 @@
 const express = require('express');
 const cors = require('cors');
-const nodemailer = require("nodemailer");
+const { Resend } = require("resend");
 const mongoose = require('mongoose');
 
 const app = express()
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 require('dotenv').config()
 app.use(cors())
 app.use(express.json())
 
-mongoose.connect(process.env.MONGO_URI).then(() => { console.log("Connected to db") }).catch(() => { console.log("Failed to connect") })
 
+mongoose.connect(process.env.MONGO_URI).then(() => { console.log("Connected to db") }).catch(() => { console.log("Failed to connect") })
 const credential = new mongoose.model("credential", {}, "bulkmail")
 
+app.post("/sendemail", async (req, res) => {
 
-app.post("/sendemail", (req, res) => {
- 
-  var msg = req.body.emailmsg;
-  var emaillist = req.body.emaillist;
-  credential.find().then((data) => {
-    const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false,
-  auth: {
-    user: data[0].toJSON().user,
-    pass: data[0].toJSON().pass,
-  },
+  try {
+
+    const msg = req.body.emailmsg;
+    const emaillist = req.body.emaillist;
+
+    for (let i = 0; i < emaillist.length; i++) {
+
+      await resend.emails.send({
+        from: "onboarding@resend.dev",
+        to: emaillist[i],
+        subject: "A message from bulk mail app.",
+        text: msg,
+      });
+
+      console.log("Email sent to: " + emaillist[i]);
+    }
+
+    res.send(true);
+
+  } catch (err) {
+
+    console.log("Resend Error:", err);
+    res.send(false);
+  }
 });
-
-    new Promise(async function (resolve, reject) {
-      try {
-        for (var i = 0; i < emaillist.length; i++) {
-          await transporter.sendMail(
-            {
-              from: data[0].toJSON().user,
-              to: emaillist[i],
-              subject: "A message from bulk mail app.",
-              text: msg
-            })
-          console.log("Email sent to:" + emaillist[i])
-        }
-        resolve("success")
-      }
-      catch (err) {
-        console.log("Nodemailer error:", err)
-        reject("failed")
-      }
-    }).then(() => { res.send(true) })
-      .catch(() => { res.send(false) })
-
-  }).catch((err) => {
-    console.log("Database error:", err)
-    res.send(false)
-  })
-})
-
 
 const PORT = process.env.PORT || 5000;
 
