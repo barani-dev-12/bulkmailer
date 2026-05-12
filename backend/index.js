@@ -34,8 +34,8 @@ app.post("/sendemail", (req, res) => {
               text: msg
             })
           console.log("Email sent to:" + emaillist[i])
-          resolve("success")
         }
+        resolve("success")
       }
       catch (err) {
         reject("failed")
