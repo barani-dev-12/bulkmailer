@@ -48,6 +48,10 @@ app.post("/sendemail", (req, res) => {
   })
 })
 
+app.get("/", (req, res) => {
+  res.send("Backend running successfully");
+});
+
 app.listen(5000, () => {
   console.log("Server is running on port 5000")
 })
