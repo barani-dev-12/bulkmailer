@@ -9,18 +9,33 @@ function App() {
   const [emaillist, setEmaillist] = useState([])
 
   function Send() {
-    setstatusValue(true)
-    axios.post("http://localhost:5000/sendemail", { emailmsg: emailmsg, emaillist: emaillist }).then(function (res) {
-      if (res.data === true) {
-        alert("Email sent successfully")
-        setstatusValue(false)
-      }
-      else {
-        alert("Error in sending email")
-        setstatusValue(false)
-      }
-    })
-  }
+  setstatusValue(true)
+
+  axios.post(
+    "https://bulkmailer-1-3fpi.onrender.com/sendemail",
+    {
+      emailmsg: emailmsg,
+      emaillist: emaillist
+    }
+  )
+  .then(function (res) {
+
+    if (res.data === true) {
+      alert("Email sent successfully")
+    }
+    else {
+      alert("Error in sending email")
+    }
+
+    setstatusValue(false)
+  })
+  .catch(function (err) {
+
+    console.log(err)
+    alert("Network Error")
+    setstatusValue(false)
+  })
+}
   function handleFile(evt) {
     const file = evt.target.files[0];
     console.log(file)
