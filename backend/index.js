@@ -12,20 +12,12 @@ mongoose.connect("mongodb+srv://baranibtech4_db_user:123@cluster0.tach31f.mongod
 
 const credential = new mongoose.model("credential", {}, "bulkmail")
 
-app.get("/test", (req, res) => {
-  res.send("API is reachable!");
-});
 
 app.post("/sendemail", (req, res) => {
-  console.log("Received request to /sendemail");
+ 
   var msg = req.body.emailmsg;
   var emaillist = req.body.emaillist;
   credential.find().then((data) => {
-    if (data.length === 0) {
-      console.log("No credentials found in database");
-      return res.send(false);
-    }
-
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
@@ -61,10 +53,7 @@ app.post("/sendemail", (req, res) => {
   })
 })
 
-app.get("/", (req, res) => {
-  res.send("Backend running successfully");
-});
 
-app.listen(process.env.PORT || 5000, () => {
-  console.log("Server is running on port " + (process.env.PORT || 5000))
+app.listen(5000, () => {
+  console.log("Server is running on port 5000")
 })
